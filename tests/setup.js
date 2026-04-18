@@ -1,3 +1,11 @@
-import app from "../src/app.js";
+import dotenv from "dotenv";
+import { resolve } from "path";
+import { readFileSync } from "fs";
 
-export default app;
+dotenv.config({ path: resolve(process.cwd(), ".env.test") });
+
+// Override MONGO_URI with the in-memory server URI if available
+try {
+  const uri = readFileSync(resolve(process.cwd(), ".mongo-test-uri"), "utf8").trim();
+  process.env.MONGO_URI = uri;
+} catch (_) {}
